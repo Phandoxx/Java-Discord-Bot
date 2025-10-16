@@ -9,12 +9,10 @@ public class MyFrame extends JFrame {
 
         this.setTitle("Java GUI Experiment");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 600);
+        //this.setSize(1920, 1000);
         this.setResizable(false);
         this.setIconImage(logo.getImage());
         this.getContentPane().setBackground(Color.DARK_GRAY);
 
-
-        this.setVisible(true);
     }
 }
