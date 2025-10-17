@@ -11,11 +11,12 @@ public class Main {
     //static boolean firstBoot = false;
     static void main() throws IOException {
         settings settings = new settings("options/settings.ini");
-        String firstBoot = settings.get("teamsInviteCode", "false");
+        String firstBoot = settings.get("firstLoad", "false"); // matches the .ini key
         System.out.println(firstBoot);
         if (firstBoot.equals("true")) {
             setup();
         }
+
 
         MainFrame MainFrame = new MainFrame();
         MainFrame.setLayout(new BorderLayout());
