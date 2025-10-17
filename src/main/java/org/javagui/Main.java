@@ -51,7 +51,10 @@ public class Main {
         settingsLabel.setHorizontalAlignment(JLabel.CENTER);
         settingsLabel.setVerticalAlignment(JLabel.TOP);
 
-        JLabel mainLabel = new JLabel("AMD logo (it's just a random image I had)", image, JLabel.CENTER);
+        JLabel mainLabel = new JLabel();
+        mainLabel.setText("AMD logo (it's just a random image I had)");
+        mainLabel.setIcon(image);
+        mainLabel.setHorizontalAlignment(JLabel.CENTER);
         mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
         mainLabel.setForeground(Color.GREEN);
         mainLabel.setHorizontalTextPosition(JLabel.CENTER);
