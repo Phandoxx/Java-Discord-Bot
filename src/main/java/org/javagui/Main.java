@@ -2,11 +2,20 @@ package org.javagui;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.io.*;
+import java.util.Properties;
 
 public class Main {
-    static boolean firstBoot = false;
-    static void main() {
-        setup();
+
+
+    //static boolean firstBoot = false;
+    static void main() throws IOException {
+        settings settings = new settings("options/settings.ini");
+        String firstBoot = settings.get("teamsInviteCode", "false");
+        System.out.println(firstBoot);
+        if (firstBoot.equals("true")) {
+            setup();
+        }
 
         MainFrame MainFrame = new MainFrame();
         MainFrame.setLayout(new BorderLayout());
@@ -56,9 +65,35 @@ public class Main {
 
     }
     public static void setup() {
-        if (firstBoot) {
             String username = JOptionPane.showInputDialog("Enter your username");
             JOptionPane.showMessageDialog(null, "Welcome " + username);
+    }
+    public static class settings {
+        private final Properties props = new Properties();
+        public settings(String settingsPath) throws IOException {
+            // Try to load from classpath first (inside the JAR)
+            InputStream stream = getClass().getResourceAsStream("/" + settingsPath);
+            if (stream != null) {
+                try (InputStreamReader reader = new InputStreamReader(stream)) {
+                    props.load(reader);
+                    return;
+                }
+            }
+
+            // Fallback: load from disk (useful when running in IDE)
+            File settingsFile = new File("files/" + settingsPath);
+            if (settingsFile.exists()) {
+                try (FileReader reader = new FileReader(settingsFile)) {
+                    props.load(reader);
+                    return;
+                }
+            }
+
+            throw new FileNotFoundException("settings.ini not found in classpath or disk");
+        }
+
+        public String get(String key, String defaultValue) {
+            return props.getProperty(key, defaultValue);
         }
     }
 }
