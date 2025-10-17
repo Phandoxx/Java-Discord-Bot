@@ -72,7 +72,7 @@ public class Main {
         mainPanel.add(startButton);
 
         JButton stopButton = new JButton();
-        stopButton.setText("Stop");
+        stopButton.setText("Close/Stop");
         stopButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
         stopButton.setForeground(Color.WHITE);
         stopButton.setBackground(Color.DARK_GRAY);
@@ -85,8 +85,8 @@ public class Main {
         });
 
         stopButton.addActionListener(e -> {
-            System.out.println("Stop button clicked!");
-            JOptionPane.showMessageDialog(null, "Stop button pressed!");
+            System.out.println("Close/Stop button clicked!");
+            System.exit(0);
         });
 
         // Add the label to the panel
