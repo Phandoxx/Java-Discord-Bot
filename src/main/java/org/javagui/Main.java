@@ -4,17 +4,22 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.io.*;
 import java.util.Properties;
+import org.ini4j.Wini;
 
 public class Main {
 
 
     //static boolean firstBoot = false;
     static void main() throws IOException {
+        Wini ini = new Wini(new File("files/options/settings.ini"));
         settings settings = new settings("options/settings.ini");
         String firstBoot = settings.get("firstLoad", "false"); // matches the .ini key
         System.out.println(firstBoot);
+
         if (firstBoot.equals("true")) {
             setup();
+            ini.put("general", "firstLoad", "false");
+            ini.store();
         }
 
 
