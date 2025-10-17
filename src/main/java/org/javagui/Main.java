@@ -29,8 +29,8 @@ public class Main {
         JPanel settingsPanel = new JPanel();
         JPanel mainPanel = new JPanel();
 
-        settingsPanel.setBackground(Color.DARK_GRAY);
-        mainPanel.setBackground(Color.GRAY);
+        settingsPanel.setBackground(new Color(31, 31, 31));
+        mainPanel.setBackground(new Color(51, 51, 51));
 
         settingsPanel.setPreferredSize(new Dimension(100,50));
 
@@ -40,28 +40,54 @@ public class Main {
 
         MainFrame.add(settingsPanel, BorderLayout.NORTH);
         MainFrame.add(mainPanel, BorderLayout.CENTER);
-        MainFrame.setSize(750,500);
-        MainFrame.setTitle("Java GUI Experiment");
+        MainFrame.setSize(500,250);
+        MainFrame.setTitle("Discord bot GUI");
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
 
         JLabel settingsLabel = new JLabel();
         settingsLabel.setText("Settings:");
-        settingsLabel.setForeground(Color.GRAY);
+        settingsLabel.setForeground(Color.WHITE);
         settingsLabel.setHorizontalAlignment(JLabel.CENTER);
         settingsLabel.setVerticalAlignment(JLabel.TOP);
 
         JLabel mainLabel = new JLabel();
-        mainLabel.setText("AMD logo (it's just a random image I had)");
-        mainLabel.setIcon(image);
+        //mainLabel.setText("AMD logo (it's just a random image I had)");
+        //mainLabel.setIcon(image);
         mainLabel.setHorizontalAlignment(JLabel.CENTER);
         mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        mainLabel.setForeground(Color.GREEN);
+        mainLabel.setForeground(Color.WHITE);
         mainLabel.setHorizontalTextPosition(JLabel.CENTER);
         mainLabel.setVerticalTextPosition(JLabel.BOTTOM);
         mainLabel.setIconTextGap(0);
         mainLabel.setHorizontalAlignment(JLabel.CENTER);
         mainLabel.setVerticalAlignment(JLabel.CENTER);
+
+        JButton startButton = new JButton();
+        startButton.setText("Start");
+        startButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        startButton.setForeground(Color.WHITE);
+        startButton.setBackground(Color.DARK_GRAY);
+        startButton.setBounds(100, 100, 100, 30);
+        mainPanel.add(startButton);
+
+        JButton stopButton = new JButton();
+        stopButton.setText("Stop");
+        stopButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        stopButton.setForeground(Color.WHITE);
+        stopButton.setBackground(Color.DARK_GRAY);
+        stopButton.setBounds(500, 100, 100, 30);
+        mainPanel.add(stopButton);
+
+        startButton.addActionListener(e -> {
+            System.out.println("Start button clicked!");
+            JOptionPane.showMessageDialog(null, "Start button pressed!");
+        });
+
+        stopButton.addActionListener(e -> {
+            System.out.println("Stop button clicked!");
+            JOptionPane.showMessageDialog(null, "Stop button pressed!");
+        });
 
         // Add the label to the panel
         mainPanel.add(mainLabel, BorderLayout.CENTER);
