@@ -30,6 +30,12 @@ public class Main {
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
 
+        JLabel settingsLabel = new JLabel();
+        settingsLabel.setText("Settings:");
+        settingsLabel.setForeground(Color.GRAY);
+        settingsLabel.setHorizontalAlignment(JLabel.CENTER);
+        settingsLabel.setVerticalAlignment(JLabel.TOP);
+
         JLabel mainLabel = new JLabel("AMD logo (it's just a random image I had)", image, JLabel.CENTER);
         mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
         mainLabel.setForeground(Color.GREEN);
@@ -41,6 +47,7 @@ public class Main {
 
         // Add the label to the panel
         mainPanel.add(mainLabel, BorderLayout.CENTER);
+        settingsPanel.add(settingsLabel, BorderLayout.NORTH);
 
 
 
