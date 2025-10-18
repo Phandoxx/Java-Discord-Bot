@@ -61,10 +61,11 @@ public class DiscordBot extends ListenerAdapter {
             }
             //event.getChannel().delete().queue();
         }
+        String silencedUser = Main.settings.get("silencedUser", "null");
 
         for (String lance : BannedWords) {
             // Check if message contains a banned word AND author matches
-            if (decapitalizedContent.contains(lance) && author.equalsIgnoreCase("dontmindmeyes69420#0000")) {
+            if (decapitalizedContent.contains(lance) && author.equalsIgnoreCase(silencedUser)) {
                 event.getMessage().delete().queue();
                 if (silentMode.equals("false")) {
                     event.getChannel().sendMessage("Message deleted, " + event.getAuthor().getAsMention() + "!").queue();
@@ -84,8 +85,10 @@ public class DiscordBot extends ListenerAdapter {
         String input = Main.settings.get("bannedWords", "null");
         List<String> BannedWords = Main.stringSetting.getAsList(input);
 
+        String silencedUser = Main.settings.get("silencedUser", "null");
+
         for (String banned : BannedWords) {
-            if (content.contains(banned) && author.equalsIgnoreCase("dontmindmeyes69420#0000")) {
+            if (content.contains(banned) && author.equalsIgnoreCase(silencedUser)) {
                 event.getMessage().delete().queue(
                         success -> System.out.println("Deleted edited message from " + author),
                         error -> System.out.println("Failed to delete edited message: " + error.getMessage())
