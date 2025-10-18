@@ -3,8 +3,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.io.*;
+import java.util.List;
 import java.util.Properties;
 import org.ini4j.Wini;
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
@@ -15,6 +19,8 @@ public class Main {
         settings settings = new settings("options/settings.ini");
         String firstBoot = settings.get("firstLoad", "false"); // matches the .ini key
         System.out.println(firstBoot);
+        String discordToken = settings.get("discordToken", "null"); // matches the .ini key
+        System.out.println(discordToken);
 
         if (firstBoot.equals("true")) {
             setup();
@@ -81,7 +87,11 @@ public class Main {
 
         startButton.addActionListener(e -> {
             System.out.println("Start button clicked!");
-            JOptionPane.showMessageDialog(null, "Start button pressed!");
+            JOptionPane.showMessageDialog(null, "Starting discord bot!");
+
+            DiscordBot bot = new DiscordBot();
+            bot.startDiscordBot(discordToken);
+
         });
 
         stopButton.addActionListener(e -> {
@@ -104,7 +114,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Welcome " + username);
     }
     public static class settings {
-        private final Properties props = new Properties();
+        private static final Properties props = new Properties();
         public settings(String settingsPath) throws IOException {
             // Try to load from classpath first (inside the JAR)
             InputStream stream = getClass().getResourceAsStream("/" + settingsPath);
@@ -127,8 +137,26 @@ public class Main {
             throw new FileNotFoundException("settings.ini not found in classpath or disk");
         }
 
-        public String get(String key, String defaultValue) {
+
+        public static String get(String key, String defaultValue) {
             return props.getProperty(key, defaultValue);
+        }
+    }
+    public class stringSetting {
+
+        public static List<String> getAsList(String text) {
+            String[] parts = text.split(",");
+            List<String> result = new ArrayList<>();
+            for (String part : parts) {
+                String trimmed = part.trim();
+                if (!trimmed.isEmpty()) result.add(trimmed);
+            }
+            return result;
+        }
+
+        public static String getAsString(String text) {
+            List<String> list = getAsList(text);
+            return String.join(" ", list);
         }
     }
 }
