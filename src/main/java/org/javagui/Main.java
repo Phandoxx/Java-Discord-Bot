@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Properties;
 import org.ini4j.Wini;
 
-import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Main {
 
@@ -16,10 +16,10 @@ public class Main {
     //static boolean firstBoot = false;
     static void main() throws IOException {
         Wini ini = new Wini(new File("files/options/settings.ini"));
-        settings settings = new settings("options/settings.ini");
-        String firstBoot = settings.get("firstLoad", "false"); // matches the .ini key
+        AtomicReference<settings> settings = new AtomicReference<>(new settings("options/settings.ini"));
+        String firstBoot = settings.get().get("firstLoad", "false"); // matches the .ini key
         System.out.println(firstBoot);
-        String discordToken = settings.get("discordToken", "null"); // matches the .ini key
+        String discordToken = settings.get().get("discordToken", "null"); // matches the .ini key
         System.out.println(discordToken);
 
         if (firstBoot.equals("true")) {
@@ -61,7 +61,7 @@ public class Main {
 
         settingsPanel.add(Box.createVerticalStrut(5));
 
-        JTextField discordTokenInput = new JTextField();
+        JTextField discordTokenInput = new JTextField(discordToken);
         discordTokenInput.setMaximumSize(new Dimension(200, 25)); // fixed width
         discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
         settingsPanel.add(Box.createVerticalStrut(5));
@@ -98,7 +98,7 @@ public class Main {
         mainPanel.add(stopButton);
 
         startButton.addActionListener(e -> {
-            String enteredToken = discordTokenInput.getText(); // ✅ get the text
+            String enteredToken = discordTokenInput.getText(); // get the text
             System.out.println("token: "+ enteredToken);
             try {
                 ini.put("general", "discordToken", enteredToken);
@@ -112,7 +112,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Starting discord bot!");
 
             DiscordBot bot = new DiscordBot();
-            bot.startDiscordBot(discordToken);
+            bot.startDiscordBot(enteredToken);
 
         });
 
