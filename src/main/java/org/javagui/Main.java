@@ -51,11 +51,23 @@ public class Main {
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
 
+        settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+        settingsPanel.setBackground(new Color(31, 31, 31));
+
         JLabel settingsLabel = new JLabel();
-        settingsLabel.setText("Settings:");
+        settingsLabel.setText("Discord bot token:");
         settingsLabel.setForeground(Color.WHITE);
-        settingsLabel.setHorizontalAlignment(JLabel.CENTER);
-        settingsLabel.setVerticalAlignment(JLabel.TOP);
+        settingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
+
+        settingsPanel.add(Box.createVerticalStrut(5));
+
+        JTextField discordTokenInput = new JTextField();
+        discordTokenInput.setMaximumSize(new Dimension(200, 25)); // fixed width
+        discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(settingsLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(discordTokenInput);
 
         JLabel mainLabel = new JLabel();
         //mainLabel.setText("AMD logo (it's just a random image I had)");
@@ -86,6 +98,16 @@ public class Main {
         mainPanel.add(stopButton);
 
         startButton.addActionListener(e -> {
+            String enteredToken = discordTokenInput.getText(); // ✅ get the text
+            System.out.println("token: "+ enteredToken);
+            try {
+                ini.put("general", "discordToken", enteredToken);
+                ini.store();
+                System.out.println("Saved token to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save token: " + ex.getMessage());
+            }
             System.out.println("Start button clicked!");
             JOptionPane.showMessageDialog(null, "Starting discord bot!");
 
@@ -101,7 +123,6 @@ public class Main {
 
         // Add the label to the panel
         mainPanel.add(mainLabel, BorderLayout.CENTER);
-        settingsPanel.add(settingsLabel, BorderLayout.NORTH);
 
 
 
