@@ -61,11 +61,12 @@ public class DiscordBot extends ListenerAdapter {
             }
             //event.getChannel().delete().queue();
         }
-        String silencedUser = Main.settings.get("silencedUser", "null");
+        String silencedUsers = Main.settings.get("silencedUser", "null");
+        List<String> silencedUsersArray = Main.stringSetting.getAsList(silencedUsers);
 
         for (String lance : BannedWords) {
             // Check if message contains a banned word AND author matches
-            if (decapitalizedContent.contains(lance) && author.equalsIgnoreCase(silencedUser)) {
+            if (decapitalizedContent.contains(lance) && silencedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
                 event.getMessage().delete().queue();
                 if (silentMode.equals("false")) {
                     event.getChannel().sendMessage("Message deleted, " + event.getAuthor().getAsMention() + "!").queue();
@@ -85,10 +86,11 @@ public class DiscordBot extends ListenerAdapter {
         String input = Main.settings.get("bannedWords", "null");
         List<String> BannedWords = Main.stringSetting.getAsList(input);
 
-        String silencedUser = Main.settings.get("silencedUser", "null");
+        String silencedUsers = Main.settings.get("silencedUser", "null");
+        List<String> silencedUsersArray = Main.stringSetting.getAsList(silencedUsers);
 
         for (String banned : BannedWords) {
-            if (content.contains(banned) && author.equalsIgnoreCase(silencedUser)) {
+            if (content.contains(banned) && silencedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
                 event.getMessage().delete().queue(
                         success -> System.out.println("Deleted edited message from " + author),
                         error -> System.out.println("Failed to delete edited message: " + error.getMessage())
