@@ -47,7 +47,8 @@ public class Main {
 
         JPanel settingsPanel = new JPanel();
         JPanel silentPanel = new JPanel();
-        JPanel secondSettingsPanel = new JPanel();
+        JPanel crownedPanel = new JPanel();
+        JPanel terminatorPanel = new JPanel();
 
         JTabbedPane tabbedPane = new JTabbedPane();
         MainFrame.add(tabbedPane);
@@ -57,7 +58,8 @@ public class Main {
 
         settingsPanel.setPreferredSize(new Dimension(500,550));
 
-        secondSettingsPanel.setPreferredSize(new Dimension(500,550));
+        crownedPanel.setPreferredSize(new Dimension(500,550));
+        terminatorPanel.setPreferredSize(new Dimension(500,550));
 
         ImageIcon image = new ImageIcon("files/logo/amd.png");
         Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
@@ -65,12 +67,14 @@ public class Main {
 
         MainFrame.add(settingsPanel, BorderLayout.CENTER);
         MainFrame.add(silentPanel, BorderLayout.SOUTH);
-        MainFrame.add(secondSettingsPanel, BorderLayout.EAST);
+        MainFrame.add(crownedPanel, BorderLayout.EAST);
+        MainFrame.add(terminatorPanel, BorderLayout.EAST);
 
 
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
         settingsPanel.setBackground(new Color(41, 41, 41));
-        secondSettingsPanel.setBackground(new Color(31, 31, 31));
+        crownedPanel.setBackground(new Color(31, 31, 31));
+        terminatorPanel.setBackground(new Color(31, 31, 31));
 
 // ===== DISCORD TOKEN =====
         JLabel settingsLabel = new JLabel("Discord bot token:");
@@ -410,6 +414,8 @@ public class Main {
 
         tabbedPane.addTab("General", settingsPanel);
         tabbedPane.addTab("Silent Settings", silentPanel);
+        tabbedPane.addTab("Crowned Settings", crownedPanel);
+        tabbedPane.addTab("Terminator Settings", terminatorPanel);
 
         MainFrame.add(tabbedPane, BorderLayout.CENTER);
 
