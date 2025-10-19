@@ -49,6 +49,9 @@ public class Main {
         JPanel mainPanel = new JPanel();
         JPanel secondSettingsPanel = new JPanel();
 
+        JTabbedPane tabbedPane = new JTabbedPane();
+        MainFrame.add(tabbedPane);
+
         settingsPanel.setBackground(new Color(31, 31, 31));
         mainPanel.setBackground(new Color(51, 51, 51));
 
@@ -63,7 +66,7 @@ public class Main {
         MainFrame.add(settingsPanel, BorderLayout.CENTER);
         MainFrame.add(mainPanel, BorderLayout.SOUTH);
         MainFrame.add(secondSettingsPanel, BorderLayout.EAST);
-        MainFrame.setSize(1000,650);
+        MainFrame.setSize(1000,700);
         MainFrame.setTitle("Discord bot GUI");
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
@@ -402,8 +405,11 @@ public class Main {
             System.exit(0);
         });
 
+        MainFrame.add(tabbedPane, BorderLayout.CENTER);
         // Add the label to the panel
-        mainPanel.add(mainLabel, BorderLayout.CENTER);
+        tabbedPane.addTab("Settings", settingsPanel);
+        tabbedPane.addTab("Main", mainPanel);
+        tabbedPane.addTab("Extra", secondSettingsPanel);
 
 
 
