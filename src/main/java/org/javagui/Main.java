@@ -54,10 +54,10 @@ public class Main {
         MainFrame.add(tabbedPane);
 
 
-        settingsPanel.setPreferredSize(new Dimension(500,550));
-
-        crownedPanel.setPreferredSize(new Dimension(500,550));
-        terminatorPanel.setPreferredSize(new Dimension(500,550));
+        settingsPanel.setPreferredSize(new Dimension(500,200));
+        crownedPanel.setPreferredSize(new Dimension(500,200));
+        terminatorPanel.setPreferredSize(new Dimension(500,200));
+        silentPanel.setPreferredSize(new Dimension(500,200));
 
         ImageIcon image = new ImageIcon("files/logo/amd.png");
         Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
@@ -70,6 +70,10 @@ public class Main {
 
 
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+        silentPanel.setLayout(new BoxLayout(silentPanel, BoxLayout.Y_AXIS));
+        crownedPanel.setLayout(new BoxLayout(crownedPanel, BoxLayout.Y_AXIS));
+        terminatorPanel.setLayout(new BoxLayout(terminatorPanel, BoxLayout.Y_AXIS));
+
         settingsPanel.setBackground(new Color(31, 31, 31));
         crownedPanel.setBackground(new Color(31, 31, 31));
         terminatorPanel.setBackground(new Color(31, 31, 31));
@@ -112,10 +116,10 @@ public class Main {
         silencedUsersInput.setMaximumSize(new Dimension(400, 25));
         silencedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(silencedUsersLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(silencedUsersInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        silentPanel.add(silencedUsersLabel);
+        silentPanel.add(Box.createVerticalStrut(5));
+        silentPanel.add(silencedUsersInput);
+        silentPanel.add(Box.createVerticalStrut(10));
 
 // ===== SILENCE ALL USERS =====
         JLabel silenceAllLabel = new JLabel("Silence all users:");
@@ -126,10 +130,10 @@ public class Main {
         silenceAllInput.setMaximumSize(new Dimension(400, 25));
         silenceAllInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(silenceAllLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(silenceAllInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        silentPanel.add(silenceAllLabel);
+        silentPanel.add(Box.createVerticalStrut(5));
+        silentPanel.add(silenceAllInput);
+        silentPanel.add(Box.createVerticalStrut(10));
 
 // ===== CROWNED USERS =====
         JLabel crownedUsersLabel = new JLabel("Crowned users:");
@@ -140,10 +144,10 @@ public class Main {
         crownedUsersInput.setMaximumSize(new Dimension(400, 25));
         crownedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(crownedUsersLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(crownedUsersInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        crownedPanel.add(crownedUsersLabel);
+        crownedPanel.add(Box.createVerticalStrut(5));
+        crownedPanel.add(crownedUsersInput);
+        crownedPanel.add(Box.createVerticalStrut(10));
 
 // ===== CROWNED PHRASE =====
         JLabel crownedPhraseLabel = new JLabel("Crowned phrase:");
@@ -154,10 +158,10 @@ public class Main {
         crownedPhraseInput.setMaximumSize(new Dimension(400, 25));
         crownedPhraseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(crownedPhraseLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(crownedPhraseInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        crownedPanel.add(crownedPhraseLabel);
+        crownedPanel.add(Box.createVerticalStrut(5));
+        crownedPanel.add(crownedPhraseInput);
+        crownedPanel.add(Box.createVerticalStrut(10));
 
 // ===== CROWNED MESSAGE RESPONSE =====
         JLabel crownedResponseLabel = new JLabel("Crowned message response:");
@@ -168,10 +172,10 @@ public class Main {
         crownedResponseInput.setMaximumSize(new Dimension(400, 25));
         crownedResponseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(crownedResponseLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(crownedResponseInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        crownedPanel.add(crownedResponseLabel);
+        crownedPanel.add(Box.createVerticalStrut(5));
+        crownedPanel.add(crownedResponseInput);
+        crownedPanel.add(Box.createVerticalStrut(10));
 
 // ===== TERMINATOR USERS =====
         JLabel terminatorUsersLabel = new JLabel("Terminator users:");
@@ -182,10 +186,10 @@ public class Main {
         terminatorUsersInput.setMaximumSize(new Dimension(400, 25));
         terminatorUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(terminatorUsersLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(terminatorUsersInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        terminatorPanel.add(terminatorUsersLabel);
+        terminatorPanel.add(Box.createVerticalStrut(5));
+        terminatorPanel.add(terminatorUsersInput);
+        terminatorPanel.add(Box.createVerticalStrut(10));
 
 // ===== TERMINATOR PHRASE =====
         JLabel terminatorPhraseLabel = new JLabel("Terminator phrase:");
@@ -196,10 +200,10 @@ public class Main {
         terminatorPhraseInput.setMaximumSize(new Dimension(400, 25));
         terminatorPhraseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(terminatorPhraseLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(terminatorPhraseInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        terminatorPanel.add(terminatorPhraseLabel);
+        terminatorPanel.add(Box.createVerticalStrut(5));
+        terminatorPanel.add(terminatorPhraseInput);
+        terminatorPanel.add(Box.createVerticalStrut(10));
 
 // ===== TERMINATOR RESPONSE =====
         JLabel terminatorResponseLabel = new JLabel("Terminator response:");
@@ -210,10 +214,10 @@ public class Main {
         terminatorResponseInput.setMaximumSize(new Dimension(400, 25));
         terminatorResponseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(terminatorResponseLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(terminatorResponseInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+        terminatorPanel.add(terminatorResponseLabel);
+        terminatorPanel.add(Box.createVerticalStrut(5));
+        terminatorPanel.add(terminatorResponseInput);
+        terminatorPanel.add(Box.createVerticalStrut(10));
 
         // Silent Mode
         JLabel silentModeLabel = new JLabel("Silent mode:");
@@ -224,10 +228,10 @@ public class Main {
         silentModeInput.setMaximumSize(new Dimension(400, 25));
         silentModeInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(silentModeLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(silentModeInput);
-        settingsPanel.add(Box.createVerticalStrut(5));
+        silentPanel.add(silentModeLabel);
+        silentPanel.add(Box.createVerticalStrut(5));
+        silentPanel.add(silentModeInput);
+        silentPanel.add(Box.createVerticalStrut(5));
 
 
         JLabel mainLabel = new JLabel();
