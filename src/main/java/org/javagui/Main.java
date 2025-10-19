@@ -62,7 +62,7 @@ public class Main {
         settingsPanel.add(Box.createVerticalStrut(5));
 
         JTextField discordTokenInput = new JTextField(discordToken);
-        discordTokenInput.setMaximumSize(new Dimension(200, 25)); // fixed width
+        discordTokenInput.setMaximumSize(new Dimension(400, 25)); // fixed width
         discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
         settingsPanel.add(Box.createVerticalStrut(5));
         settingsPanel.add(settingsLabel);
