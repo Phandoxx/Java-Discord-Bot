@@ -21,6 +21,8 @@ public class Main {
         System.out.println(firstBoot);
         String discordToken = settings.get().get("discordToken", "null"); // matches the .ini key
         System.out.println(discordToken);
+        String bannedWords = settings.get().get("bannedWords", "null");
+        String silencedUsers = settings.get().get("silencedUser", "null");
 
         if (firstBoot.equals("true")) {
             setup();
@@ -38,7 +40,7 @@ public class Main {
         settingsPanel.setBackground(new Color(31, 31, 31));
         mainPanel.setBackground(new Color(51, 51, 51));
 
-        settingsPanel.setPreferredSize(new Dimension(100,50));
+        settingsPanel.setPreferredSize(new Dimension(100,160));
 
         ImageIcon image = new ImageIcon("files/logo/amd.png");
         Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
@@ -51,8 +53,9 @@ public class Main {
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
 
+
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
-        settingsPanel.setBackground(new Color(31, 31, 31));
+        settingsPanel.setBackground(new Color(41, 41, 41));
 
         JLabel settingsLabel = new JLabel();
         settingsLabel.setText("Discord bot token:");
@@ -61,13 +64,40 @@ public class Main {
 
         settingsPanel.add(Box.createVerticalStrut(5));
 
+        JLabel bannedWordsLabel = new JLabel("Banned words:");
+        bannedWordsLabel.setForeground(Color.WHITE);
+        bannedWordsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField bannedWordsInput = new JTextField(bannedWords);
+        bannedWordsInput.setMaximumSize(new Dimension(400, 25));
+        bannedWordsInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel silencedUsersLabel = new JLabel("Silenced Users:");
+        silencedUsersLabel.setForeground(Color.WHITE);
+        silencedUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField silencedUsersInput = new JTextField(silencedUsers);
+        silencedUsersInput.setMaximumSize(new Dimension(400, 25));
+        silencedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JTextField discordTokenInput = new JTextField(discordToken);
         discordTokenInput.setMaximumSize(new Dimension(400, 25)); // fixed width
         discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
-        settingsPanel.add(Box.createVerticalStrut(5));
         settingsPanel.add(settingsLabel);
         settingsPanel.add(Box.createVerticalStrut(5));
         settingsPanel.add(discordTokenInput);
+
+        settingsPanel.add(Box.createVerticalStrut(5)); // optional spacing
+        settingsPanel.add(bannedWordsLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(bannedWordsInput);
+        settingsPanel.add(Box.createVerticalStrut(5));
+
+        settingsPanel.add(Box.createVerticalStrut(5)); // optional spacing
+        settingsPanel.add(silencedUsersLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(silencedUsersInput);
+        settingsPanel.add(Box.createVerticalStrut(5));
 
         JLabel mainLabel = new JLabel();
         //mainLabel.setText("AMD logo (it's just a random image I had)");
@@ -100,6 +130,12 @@ public class Main {
         startButton.addActionListener(e -> {
             String enteredToken = discordTokenInput.getText(); // get the text
             System.out.println("token: "+ enteredToken);
+
+            String enteredBannedWords = bannedWordsInput.getText();
+            System.out.println("banned words: "+ enteredBannedWords);
+
+            String enteredSilencedUsers = silencedUsersInput.getText();
+            System.out.println("silenced users: "+ enteredSilencedUsers);
             try {
                 ini.put("general", "discordToken", enteredToken);
                 ini.store();
@@ -107,6 +143,22 @@ public class Main {
             } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Failed to save token: " + ex.getMessage());
+            }
+            try {
+                ini.put("general", "bannedWords", enteredBannedWords);
+                ini.store();
+                System.out.println("Saved banned words to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save banned words: " + ex.getMessage());
+            }
+            try {
+                ini.put("general", "silencedUser", enteredSilencedUsers);
+                ini.store();
+                System.out.println("Saved silenced users to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save silenced users: " + ex.getMessage());
             }
             System.out.println("Start button clicked!");
             JOptionPane.showMessageDialog(null, "Starting discord bot!");
