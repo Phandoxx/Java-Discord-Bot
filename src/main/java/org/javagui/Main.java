@@ -418,6 +418,7 @@ public class Main {
         tabbedPane.addTab("Terminator Settings", terminatorPanel);
 
         MainFrame.add(tabbedPane, BorderLayout.CENTER);
+        MainFrame.setVisible(true);
 
 
     }
