@@ -40,26 +40,30 @@ public class Main {
             ini.get().put("general", "firstLoad", "false");
             ini.get().store();
         }
-
+        JPanel topContainer = new JPanel(new BorderLayout());
 
         MainFrame MainFrame = new MainFrame();
         MainFrame.setLayout(new BorderLayout());
 
         JPanel settingsPanel = new JPanel();
         JPanel mainPanel = new JPanel();
+        JPanel secondSettingsPanel = new JPanel();
 
         settingsPanel.setBackground(new Color(31, 31, 31));
         mainPanel.setBackground(new Color(51, 51, 51));
 
-        settingsPanel.setPreferredSize(new Dimension(100,550));
+        settingsPanel.setPreferredSize(new Dimension(500,550));
+
+        secondSettingsPanel.setPreferredSize(new Dimension(500,550));
 
         ImageIcon image = new ImageIcon("files/logo/amd.png");
         Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
 
 
-        MainFrame.add(settingsPanel, BorderLayout.NORTH);
-        MainFrame.add(mainPanel, BorderLayout.CENTER);
-        MainFrame.setSize(500,650);
+        MainFrame.add(settingsPanel, BorderLayout.CENTER);
+        MainFrame.add(mainPanel, BorderLayout.SOUTH);
+        MainFrame.add(secondSettingsPanel, BorderLayout.EAST);
+        MainFrame.setSize(1000,650);
         MainFrame.setTitle("Discord bot GUI");
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
@@ -67,6 +71,7 @@ public class Main {
 
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
         settingsPanel.setBackground(new Color(41, 41, 41));
+        secondSettingsPanel.setBackground(new Color(31, 31, 31));
 
 // ===== DISCORD TOKEN =====
         JLabel settingsLabel = new JLabel("Discord bot token:");
