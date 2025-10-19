@@ -27,7 +27,7 @@ public class DiscordBot extends ListenerAdapter {
 
             jda = JDABuilder.createLight(discordToken, intents)
                     .addEventListeners(this) // listen for events in THIS class
-                    .setActivity(Activity.playing("lance handling"))
+                    .setActivity(Activity.playing("Im always watching..."))
                     .build();
 
             jda.awaitReady(); // Wait until the bot is fully loaded
@@ -55,30 +55,76 @@ public class DiscordBot extends ListenerAdapter {
         String input = Main.settings.get("bannedWords", "null");
         List<String> BannedWords = Main.stringSetting.getAsList(input);
 
-        if (decapitalizedContent.contains("furry")) {
-            if (silentMode.equals("false")) {
-                event.getChannel().sendMessage(mentionAuthor + " be careful...").queue();
-            }
-            //event.getChannel().delete().queue();
+        String crownedUsers = Main.settings.get("crownedUsers", "null");
+        List<String> crownedUsersArray = Main.stringSetting.getAsList(crownedUsers);
+        String crownedPhrase = Main.settings.get("crownedPhrase", "null");
+        String crownedMessageResponse = Main.settings.get("crownedMessageResponse", "null");
+
+        if (decapitalizedContent.contains(crownedPhrase) && crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
+            event.getChannel().sendMessage(crownedMessageResponse + mentionAuthor).queue();
         }
+
+        String terminatorUser = Main.settings.get("terminatorUsers", "null");
+        List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
+        String terminatorUserPhrase = Main.settings.get("terminatorUsersPhrase", "null");
+        String terminatorUserResponse = Main.settings.get("terminatorUsersResponse", "null");
+
+        if (decapitalizedContent.contains(terminatorUserPhrase.toLowerCase()) && terminatorUserArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
+            event.getChannel().sendMessage(mentionAuthor + " " + terminatorUserResponse)
+                    .queue(message -> {
+                        // This runs *after* the message successfully sends
+                        System.exit(0);
+                    });
+        }
+
         String silencedUsers = Main.settings.get("silencedUser", "null");
         List<String> silencedUsersArray = Main.stringSetting.getAsList(silencedUsers);
+        String silencedAllUsers = Main.settings.get("silenceAllUsers", "false");
 
-        for (String lance : BannedWords) {
-            // Check if message contains a banned word AND author matches
-            if (decapitalizedContent.contains(lance) && silencedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
-                event.getMessage().delete().queue();
-                if (silentMode.equals("false")) {
-                    event.getChannel().sendMessage("Message deleted, " + event.getAuthor().getAsMention() + "!").queue();
+        if (silencedAllUsers.equalsIgnoreCase("false")) {
+            for (String message : BannedWords) {
+                // Check if message contains a banned word AND author matches
+                if (decapitalizedContent.contains(message) && silencedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
+                    event.getMessage().delete().queue();
+                    if (silentMode.equals("false")) {
+                        event.getChannel().sendMessage("Message deleted, " + event.getAuthor().getAsMention() + "!").queue();
+                    }
+                    break; // stop checking after first match
                 }
-                break; // stop checking after first match
             }
         }
+        else {
+            for (String message : BannedWords) {
+                // Check if message contains a banned word AND author matches
+                if (decapitalizedContent.contains(message)) {
+                    if (crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author)) || (terminatorUserArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) ) {
+                        System.out.println("Not deleting from crowned or terminator users");
+                    }
+                    else {
+                        event.getMessage().delete().queue();
+                        if (silentMode.equals("false")) {
+                            event.getChannel().sendMessage("Message deleted, " + event.getAuthor().getAsMention() + "!").queue();
+                        }
+                        break; // stop checking after first match
+                    }
+                }
+            }
+        }
+        //
     }
     @Override
     public void onMessageUpdate(@NotNull net.dv8tion.jda.api.events.message.MessageUpdateEvent event) {
         // Ignore messages from bots (including itself)
         if (event.getAuthor().isBot()) return;
+        String crownedUsers = Main.settings.get("crownedUsers", "null");
+        List<String> crownedUsersArray = Main.stringSetting.getAsList(crownedUsers);
+        String crownedPhrase = Main.settings.get("crownedPhrase", "null");
+        String crownedMessageResponse = Main.settings.get("crownedMessageResponse", "null");
+
+        String terminatorUser = Main.settings.get("terminatorUsers", "null");
+        List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
+        String terminatorUserPhrase = Main.settings.get("terminatorUsersPhrase", "null");
+        String terminatorUserResponse = Main.settings.get("terminatorUsersResponse", "null");
 
         String author = event.getAuthor().getAsTag();
         String content = event.getMessage().getContentDisplay().toLowerCase();
@@ -89,16 +135,37 @@ public class DiscordBot extends ListenerAdapter {
         String silencedUsers = Main.settings.get("silencedUser", "null");
         List<String> silencedUsersArray = Main.stringSetting.getAsList(silencedUsers);
 
-        for (String banned : BannedWords) {
-            if (content.contains(banned) && silencedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
-                event.getMessage().delete().queue(
-                        success -> System.out.println("Deleted edited message from " + author),
-                        error -> System.out.println("Failed to delete edited message: " + error.getMessage())
-                );
+        String silencedAllUsers = Main.settings.get("silenceAllUsers", "false");
 
-                break;
+        if (silencedAllUsers.equalsIgnoreCase("false")){
+
+            for (String banned : BannedWords) {
+                if (content.contains(banned) && silencedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
+                    event.getMessage().delete().queue(
+                            success -> System.out.println("Deleted edited message from " + author),
+                            error -> System.out.println("Failed to delete edited message: " + error.getMessage())
+                    );
+
+                    break;
+                }
+            }
+        }
+        else {
+            if (crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author)) || (terminatorUserArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) ) {
+                System.out.println("Not deleting from crowned or terminator users");
+            }
+            else {
+                for (String banned : BannedWords) {
+                    if (content.contains(banned)) {
+                        event.getMessage().delete().queue(
+                                success -> System.out.println("Deleted edited message from " + author),
+                                error -> System.out.println("Failed to delete edited message: " + error.getMessage())
+                        );
+
+                        break;
+                    }
+                }
             }
         }
     }
-
 }

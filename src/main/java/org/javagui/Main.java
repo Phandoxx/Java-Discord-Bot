@@ -15,19 +15,30 @@ public class Main {
 
     //static boolean firstBoot = false;
     static void main() throws IOException {
-        Wini ini = new Wini(new File("files/options/settings.ini"));
+        AtomicReference<Wini> ini = new AtomicReference<>(new Wini(new File("files/options/settings.ini")));
         AtomicReference<settings> settings = new AtomicReference<>(new settings("options/settings.ini"));
         String firstBoot = settings.get().get("firstLoad", "false"); // matches the .ini key
         System.out.println(firstBoot);
+
         String discordToken = settings.get().get("discordToken", "null"); // matches the .ini key
         System.out.println(discordToken);
+
         String bannedWords = settings.get().get("bannedWords", "null");
         String silencedUsers = settings.get().get("silencedUser", "null");
+        String silentMode = settings.get().get("silentMode", "false");
 
+        String silenceAllUsers = settings.get().get("silenceAllUsers", "false");
+        String crownedUsers = settings.get().get("crownedUsers", "null");
+        String crownedPhrase = settings.get().get("crownedPhrase", "null");
+        String crownedMessageResponse = settings.get().get("crownedMessageResponse", "null");
+
+        String terminatorUsers = settings.get().get("terminatorUsers", "null");
+        String terminatorUsersPhrase = settings.get().get("terminatorUsersPhrase", "null");
+        String terminatorUsersResponse = settings.get().get("terminatorUsersResponse", "null");
         if (firstBoot.equals("true")) {
             setup();
-            ini.put("general", "firstLoad", "false");
-            ini.store();
+            ini.get().put("general", "firstLoad", "false");
+            ini.get().store();
         }
 
 
@@ -40,7 +51,7 @@ public class Main {
         settingsPanel.setBackground(new Color(31, 31, 31));
         mainPanel.setBackground(new Color(51, 51, 51));
 
-        settingsPanel.setPreferredSize(new Dimension(100,160));
+        settingsPanel.setPreferredSize(new Dimension(100,550));
 
         ImageIcon image = new ImageIcon("files/logo/amd.png");
         Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
@@ -48,7 +59,7 @@ public class Main {
 
         MainFrame.add(settingsPanel, BorderLayout.NORTH);
         MainFrame.add(mainPanel, BorderLayout.CENTER);
-        MainFrame.setSize(500,250);
+        MainFrame.setSize(500,650);
         MainFrame.setTitle("Discord bot GUI");
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setResizable(false);
@@ -57,13 +68,21 @@ public class Main {
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
         settingsPanel.setBackground(new Color(41, 41, 41));
 
-        JLabel settingsLabel = new JLabel();
-        settingsLabel.setText("Discord bot token:");
+// ===== DISCORD TOKEN =====
+        JLabel settingsLabel = new JLabel("Discord bot token:");
         settingsLabel.setForeground(Color.WHITE);
-        settingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
+        settingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        JTextField discordTokenInput = new JTextField(discordToken);
+        discordTokenInput.setMaximumSize(new Dimension(400, 25));
+        discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(settingsLabel);
         settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(discordTokenInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
 
+// ===== BANNED WORDS =====
         JLabel bannedWordsLabel = new JLabel("Banned words:");
         bannedWordsLabel.setForeground(Color.WHITE);
         bannedWordsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -72,7 +91,13 @@ public class Main {
         bannedWordsInput.setMaximumSize(new Dimension(400, 25));
         bannedWordsInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel silencedUsersLabel = new JLabel("Silenced Users:");
+        settingsPanel.add(bannedWordsLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(bannedWordsInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== SILENCED USER =====
+        JLabel silencedUsersLabel = new JLabel("Silenced user:");
         silencedUsersLabel.setForeground(Color.WHITE);
         silencedUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -80,24 +105,123 @@ public class Main {
         silencedUsersInput.setMaximumSize(new Dimension(400, 25));
         silencedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JTextField discordTokenInput = new JTextField(discordToken);
-        discordTokenInput.setMaximumSize(new Dimension(400, 25)); // fixed width
-        discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT); // center horizontally
-        settingsPanel.add(settingsLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(discordTokenInput);
-
-        settingsPanel.add(Box.createVerticalStrut(5)); // optional spacing
-        settingsPanel.add(bannedWordsLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(bannedWordsInput);
-        settingsPanel.add(Box.createVerticalStrut(5));
-
-        settingsPanel.add(Box.createVerticalStrut(5)); // optional spacing
         settingsPanel.add(silencedUsersLabel);
         settingsPanel.add(Box.createVerticalStrut(5));
         settingsPanel.add(silencedUsersInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== SILENCE ALL USERS =====
+        JLabel silenceAllLabel = new JLabel("Silence all users:");
+        silenceAllLabel.setForeground(Color.WHITE);
+        silenceAllLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField silenceAllInput = new JTextField(String.valueOf(silenceAllUsers));
+        silenceAllInput.setMaximumSize(new Dimension(400, 25));
+        silenceAllInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(silenceAllLabel);
         settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(silenceAllInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== CROWNED USERS =====
+        JLabel crownedUsersLabel = new JLabel("Crowned users:");
+        crownedUsersLabel.setForeground(Color.WHITE);
+        crownedUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField crownedUsersInput = new JTextField(crownedUsers);
+        crownedUsersInput.setMaximumSize(new Dimension(400, 25));
+        crownedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(crownedUsersLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(crownedUsersInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== CROWNED PHRASE =====
+        JLabel crownedPhraseLabel = new JLabel("Crowned phrase:");
+        crownedPhraseLabel.setForeground(Color.WHITE);
+        crownedPhraseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField crownedPhraseInput = new JTextField(crownedPhrase);
+        crownedPhraseInput.setMaximumSize(new Dimension(400, 25));
+        crownedPhraseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(crownedPhraseLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(crownedPhraseInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== CROWNED MESSAGE RESPONSE =====
+        JLabel crownedResponseLabel = new JLabel("Crowned message response:");
+        crownedResponseLabel.setForeground(Color.WHITE);
+        crownedResponseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField crownedResponseInput = new JTextField(crownedMessageResponse);
+        crownedResponseInput.setMaximumSize(new Dimension(400, 25));
+        crownedResponseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(crownedResponseLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(crownedResponseInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== TERMINATOR USERS =====
+        JLabel terminatorUsersLabel = new JLabel("Terminator users:");
+        terminatorUsersLabel.setForeground(Color.WHITE);
+        terminatorUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField terminatorUsersInput = new JTextField(terminatorUsers);
+        terminatorUsersInput.setMaximumSize(new Dimension(400, 25));
+        terminatorUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(terminatorUsersLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(terminatorUsersInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== TERMINATOR PHRASE =====
+        JLabel terminatorPhraseLabel = new JLabel("Terminator phrase:");
+        terminatorPhraseLabel.setForeground(Color.WHITE);
+        terminatorPhraseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField terminatorPhraseInput = new JTextField(terminatorUsersPhrase);
+        terminatorPhraseInput.setMaximumSize(new Dimension(400, 25));
+        terminatorPhraseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(terminatorPhraseLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(terminatorPhraseInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+// ===== TERMINATOR RESPONSE =====
+        JLabel terminatorResponseLabel = new JLabel("Terminator response:");
+        terminatorResponseLabel.setForeground(Color.WHITE);
+        terminatorResponseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField terminatorResponseInput = new JTextField(terminatorUsersResponse);
+        terminatorResponseInput.setMaximumSize(new Dimension(400, 25));
+        terminatorResponseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(terminatorResponseLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(terminatorResponseInput);
+        settingsPanel.add(Box.createVerticalStrut(10));
+
+        // Silent Mode
+        JLabel silentModeLabel = new JLabel("Silent mode:");
+        silentModeLabel.setForeground(Color.WHITE);
+        silentModeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField silentModeInput = new JTextField(silentMode);
+        silentModeInput.setMaximumSize(new Dimension(400, 25));
+        silentModeInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        settingsPanel.add(silentModeLabel);
+        settingsPanel.add(Box.createVerticalStrut(5));
+        settingsPanel.add(silentModeInput);
+        settingsPanel.add(Box.createVerticalStrut(5));
+
 
         JLabel mainLabel = new JLabel();
         //mainLabel.setText("AMD logo (it's just a random image I had)");
@@ -129,44 +253,144 @@ public class Main {
 
         startButton.addActionListener(e -> {
             String enteredToken = discordTokenInput.getText(); // get the text
-            System.out.println("token: "+ enteredToken);
+            System.out.println("token: " + enteredToken);
 
             String enteredBannedWords = bannedWordsInput.getText();
-            System.out.println("banned words: "+ enteredBannedWords);
+            System.out.println("banned words: " + enteredBannedWords);
 
             String enteredSilencedUsers = silencedUsersInput.getText();
-            System.out.println("silenced users: "+ enteredSilencedUsers);
+            System.out.println("silenced users: " + enteredSilencedUsers);
+
+            String enteredSilentMode = silentModeInput.getText();
+            System.out.println("silent mode: " + enteredSilentMode);
+
+            String enteredSilenceAllUsers = silenceAllInput.getText();
+            System.out.println("silence all users: " + enteredSilenceAllUsers);
+
+            String enteredCrownedUsers = crownedUsersInput.getText();
+            System.out.println("crowned users: " + enteredCrownedUsers);
+
+            String enteredCrownedPhrase = crownedPhraseInput.getText();
+            System.out.println("crowned phrase: " + enteredCrownedPhrase);
+
+            String enteredCrownedResponse = crownedResponseInput.getText();
+            System.out.println("crowned message response: " + enteredCrownedResponse);
+
+            String enteredTerminatorUsers = terminatorUsersInput.getText();
+            System.out.println("terminator users: " + enteredTerminatorUsers);
+
+            String enteredTerminatorPhrase = terminatorPhraseInput.getText();
+            System.out.println("terminator phrase: " + enteredTerminatorPhrase);
+
+            String enteredTerminatorResponse = terminatorResponseInput.getText();
+            System.out.println("terminator response: " + enteredTerminatorResponse);
+
             try {
-                ini.put("general", "discordToken", enteredToken);
-                ini.store();
+                ini.get().put("general", "discordToken", enteredToken);
+                ini.get().store();
                 System.out.println("Saved token to settings.ini");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Failed to save token: " + ex.getMessage());
             }
             try {
-                ini.put("general", "bannedWords", enteredBannedWords);
-                ini.store();
+                ini.get().put("general", "bannedWords", enteredBannedWords);
+                ini.get().store();
                 System.out.println("Saved banned words to settings.ini");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Failed to save banned words: " + ex.getMessage());
             }
             try {
-                ini.put("general", "silencedUser", enteredSilencedUsers);
-                ini.store();
+                ini.get().put("general", "silencedUser", enteredSilencedUsers);
+                ini.get().store();
                 System.out.println("Saved silenced users to settings.ini");
             } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Failed to save silenced users: " + ex.getMessage());
             }
+            try {
+                ini.get().put("general", "silentMode", enteredSilentMode);
+                ini.get().store();
+                System.out.println("Saved silent mode to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save silent mode: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "silenceAllUsers", enteredSilenceAllUsers);
+                ini.get().store();
+                System.out.println("Saved silenceAllUsers to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save silenceAllUsers: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "crownedUsers", enteredCrownedUsers);
+                ini.get().store();
+                System.out.println("Saved crownedUsers to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save crownedUsers: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "crownedPhrase", enteredCrownedPhrase);
+                ini.get().store();
+                System.out.println("Saved crownedPhrase to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save crownedPhrase: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "crownedMessageResponse", enteredCrownedResponse);
+                ini.get().store();
+                System.out.println("Saved crownedMessageResponse to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save crownedMessageResponse: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "terminatorUsers", enteredTerminatorUsers);
+                ini.get().store();
+                System.out.println("Saved terminatorUsers to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save terminatorUsers: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "terminatorUsersPhrase", enteredTerminatorPhrase);
+                ini.get().store();
+                System.out.println("Saved terminatorUsersPhrase to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save terminatorUsersPhrase: " + ex.getMessage());
+            }
+            try {
+                ini.get().put("general", "terminatorUsersResponse", enteredTerminatorResponse);
+                ini.get().store();
+                System.out.println("Saved terminatorUsersResponse to settings.ini");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to save terminatorUsersResponse: " + ex.getMessage());
+            }
+
             System.out.println("Start button clicked!");
             JOptionPane.showMessageDialog(null, "Starting discord bot!");
 
+
+            try {
+                settings.set(new settings("options/settings.ini")); // reload settings object
+                System.out.println("Reloaded Main.settings from file");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Failed to reload settings: " + ex.getMessage());
+            }
+
+
             DiscordBot bot = new DiscordBot();
             bot.startDiscordBot(enteredToken);
-
         });
+
 
         stopButton.addActionListener(e -> {
             System.out.println("Close/Stop button clicked!");
