@@ -46,14 +46,14 @@ public class Main {
         MainFrame.setLayout(new BorderLayout());
 
         JPanel settingsPanel = new JPanel();
-        JPanel mainPanel = new JPanel();
+        JPanel silentPanel = new JPanel();
         JPanel secondSettingsPanel = new JPanel();
 
         JTabbedPane tabbedPane = new JTabbedPane();
         MainFrame.add(tabbedPane);
 
         settingsPanel.setBackground(new Color(31, 31, 31));
-        mainPanel.setBackground(new Color(51, 51, 51));
+        silentPanel.setBackground(new Color(51, 51, 51));
 
         settingsPanel.setPreferredSize(new Dimension(500,550));
 
@@ -64,7 +64,7 @@ public class Main {
 
 
         MainFrame.add(settingsPanel, BorderLayout.CENTER);
-        MainFrame.add(mainPanel, BorderLayout.SOUTH);
+        MainFrame.add(silentPanel, BorderLayout.SOUTH);
         MainFrame.add(secondSettingsPanel, BorderLayout.EAST);
 
 
@@ -245,7 +245,7 @@ public class Main {
         startButton.setForeground(Color.WHITE);
         startButton.setBackground(Color.DARK_GRAY);
         startButton.setBounds(100, 100, 100, 30);
-        mainPanel.add(startButton);
+        silentPanel.add(startButton);
 
         JButton stopButton = new JButton();
         stopButton.setText("Close/Stop");
@@ -253,7 +253,7 @@ public class Main {
         stopButton.setForeground(Color.WHITE);
         stopButton.setBackground(Color.DARK_GRAY);
         stopButton.setBounds(500, 100, 100, 30);
-        mainPanel.add(stopButton);
+        silentPanel.add(stopButton);
 
         startButton.addActionListener(e -> {
             String enteredToken = discordTokenInput.getText(); // get the text
@@ -408,8 +408,8 @@ public class Main {
 
         MainFrame.add(controlPanel, BorderLayout.SOUTH);
 
-        tabbedPane.addTab("Settings", settingsPanel);
-        tabbedPane.addTab("Main", mainPanel);
+        tabbedPane.addTab("General", settingsPanel);
+        tabbedPane.addTab("Silent Settings", silentPanel);
 
         MainFrame.add(tabbedPane, BorderLayout.CENTER);
 
