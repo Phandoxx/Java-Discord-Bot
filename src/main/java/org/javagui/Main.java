@@ -53,8 +53,6 @@ public class Main {
         JTabbedPane tabbedPane = new JTabbedPane();
         MainFrame.add(tabbedPane);
 
-        settingsPanel.setBackground(new Color(31, 31, 31));
-        silentPanel.setBackground(new Color(51, 51, 51));
 
         settingsPanel.setPreferredSize(new Dimension(500,550));
 
@@ -72,9 +70,10 @@ public class Main {
 
 
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
-        settingsPanel.setBackground(new Color(41, 41, 41));
+        settingsPanel.setBackground(new Color(31, 31, 31));
         crownedPanel.setBackground(new Color(31, 31, 31));
         terminatorPanel.setBackground(new Color(31, 31, 31));
+        silentPanel.setBackground(new Color(31, 31, 31));
 
 // ===== DISCORD TOKEN =====
         JLabel settingsLabel = new JLabel("Discord bot token:");
