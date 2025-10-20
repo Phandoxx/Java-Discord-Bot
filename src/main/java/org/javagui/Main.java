@@ -296,94 +296,16 @@ public class Main {
             String enteredTerminatorResponse = terminatorResponseInput.getText();
             System.out.println("terminator response: " + enteredTerminatorResponse);
 
-            try {
-                ini.get().put("general", "discordToken", enteredToken);
-                ini.get().store();
-                System.out.println("Saved token to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save token: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "bannedWords", enteredBannedWords);
-                ini.get().store();
-                System.out.println("Saved banned words to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save banned words: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "silencedUser", enteredSilencedUsers);
-                ini.get().store();
-                System.out.println("Saved silenced users to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save silenced users: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "silentMode", enteredSilentMode);
-                ini.get().store();
-                System.out.println("Saved silent mode to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save silent mode: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "silenceAllUsers", enteredSilenceAllUsers);
-                ini.get().store();
-                System.out.println("Saved silenceAllUsers to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save silenceAllUsers: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "crownedUsers", enteredCrownedUsers);
-                ini.get().store();
-                System.out.println("Saved crownedUsers to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save crownedUsers: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "crownedPhrase", enteredCrownedPhrase);
-                ini.get().store();
-                System.out.println("Saved crownedPhrase to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save crownedPhrase: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "crownedMessageResponse", enteredCrownedResponse);
-                ini.get().store();
-                System.out.println("Saved crownedMessageResponse to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save crownedMessageResponse: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "terminatorUsers", enteredTerminatorUsers);
-                ini.get().store();
-                System.out.println("Saved terminatorUsers to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save terminatorUsers: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "terminatorUsersPhrase", enteredTerminatorPhrase);
-                ini.get().store();
-                System.out.println("Saved terminatorUsersPhrase to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save terminatorUsersPhrase: " + ex.getMessage());
-            }
-            try {
-                ini.get().put("general", "terminatorUsersResponse", enteredTerminatorResponse);
-                ini.get().store();
-                System.out.println("Saved terminatorUsersResponse to settings.ini");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Failed to save terminatorUsersResponse: " + ex.getMessage());
-            }
+            saveSetting(ini.get(), "general", "bannedWords", enteredBannedWords);
+            saveSetting(ini.get(), "general", "silencedUser", enteredSilencedUsers);
+            saveSetting(ini.get(), "general", "silentMode", enteredSilentMode);
+            saveSetting(ini.get(), "general", "silenceAllUsers", enteredSilenceAllUsers);
+            saveSetting(ini.get(), "general", "crownedUsers", enteredCrownedUsers);
+            saveSetting(ini.get(), "general", "crownedPhrase", enteredCrownedPhrase);
+            saveSetting(ini.get(), "general", "crownedMessageResponse", enteredCrownedResponse);
+            saveSetting(ini.get(), "general", "terminatorUsers", enteredTerminatorUsers);
+            saveSetting(ini.get(), "general", "terminatorUsersPhrase", enteredTerminatorPhrase);
+            saveSetting(ini.get(), "general", "terminatorUsersResponse", enteredTerminatorResponse);
 
             System.out.println("Start button clicked!");
             JOptionPane.showMessageDialog(null, "Starting discord bot!");
@@ -475,4 +397,15 @@ public class Main {
             return String.join(" ", list);
         }
     }
+    public static void saveSetting(Wini ini, String sectionName, String optionName, String input) {
+        try {
+            ini.put(sectionName, optionName, input);
+            ini.store();
+            System.out.println("Saved " + optionName + " to settings.ini");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to save " + optionName + ": " + ex.getMessage());
+        }
+    }
+
 }
