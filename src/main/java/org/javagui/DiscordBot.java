@@ -60,7 +60,7 @@ public class DiscordBot extends ListenerAdapter {
         String crownedPhrase = Main.settings.get("crownedPhrase", "null");
         String crownedMessageResponse = Main.settings.get("crownedMessageResponse", "null");
 
-        if (decapitalizedContent.contains(crownedPhrase) && crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
+        if (decapitalizedContent.contains(crownedPhrase.toLowerCase()) && crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
             event.getChannel().sendMessage(crownedMessageResponse + mentionAuthor).queue();
         }
 
