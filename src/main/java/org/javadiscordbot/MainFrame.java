@@ -1,4 +1,4 @@
-package org.javagui;
+package org.javadiscordbot;
 
 import javax.swing.*;
 import java.awt.*;

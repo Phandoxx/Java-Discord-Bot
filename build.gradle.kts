@@ -24,5 +24,5 @@ tasks.test {
     useJUnitPlatform()
 }
 application {
-    mainClass.set("org.javagui.Main")
+    mainClass.set("org.javadiscordbot.Main")
 }

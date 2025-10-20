@@ -1,1 +1,1 @@
-rootProject.name = "Java-GUI-Experiment"
+rootProject.name = "JavaDiscordBot"

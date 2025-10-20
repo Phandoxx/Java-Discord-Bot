@@ -1,7 +1,6 @@
-package org.javagui;
+package org.javadiscordbot;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.*;
 import java.util.List;
