@@ -243,7 +243,6 @@ public class Main {
             throw new FileNotFoundException("settings.ini not found in classpath or disk");
         }
 
-
         public static String get(String key, String defaultValue) {
             return props.getProperty(key, defaultValue);
         }
@@ -291,8 +290,4 @@ public class Main {
 
         return input;
     }
-
-
-
-
 }
