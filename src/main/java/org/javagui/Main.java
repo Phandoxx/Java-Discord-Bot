@@ -1,6 +1,7 @@
 package org.javagui;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.io.*;
 import java.util.List;
@@ -79,159 +80,26 @@ public class Main {
         terminatorPanel.setBackground(new Color(31, 31, 31));
         silentPanel.setBackground(new Color(31, 31, 31));
 
-// ===== DISCORD TOKEN =====
-        JLabel settingsLabel = new JLabel("Discord bot token:");
-        settingsLabel.setForeground(Color.WHITE);
-        settingsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JTextField discordTokenInput = new JTextField(discordToken);
-        discordTokenInput.setMaximumSize(new Dimension(400, 25));
-        discordTokenInput.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        settingsPanel.add(settingsLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(discordTokenInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
+// General / Discord settings
+        JTextField discordTokenInput = addSettingField(settingsPanel, "Discord bot token:", discordToken);
+        JTextField bannedWordsInput = addSettingField(settingsPanel, "Banned words:", bannedWords);
 
-// ===== BANNED WORDS =====
-        JLabel bannedWordsLabel = new JLabel("Banned words:");
-        bannedWordsLabel.setForeground(Color.WHITE);
-        bannedWordsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+// Silent user settings
+        JTextField silencedUsersInput = addSettingField(silentPanel, "Silenced user:", silencedUsers);
+        JTextField silenceAllInput = addSettingField(silentPanel, "Silence all users:", String.valueOf(silenceAllUsers));
+        JTextField silentModeInput = addSettingField(silentPanel, "Silent mode:", silentMode);
 
-        JTextField bannedWordsInput = new JTextField(bannedWords);
-        bannedWordsInput.setMaximumSize(new Dimension(400, 25));
-        bannedWordsInput.setAlignmentX(Component.CENTER_ALIGNMENT);
+// Crowned user settings
+        JTextField crownedUsersInput = addSettingField(crownedPanel, "Crowned users:", crownedUsers);
+        JTextField crownedPhraseInput = addSettingField(crownedPanel, "Crowned phrase:", crownedPhrase);
+        JTextField crownedResponseInput = addSettingField(crownedPanel, "Crowned message response:", crownedMessageResponse);
 
-        settingsPanel.add(bannedWordsLabel);
-        settingsPanel.add(Box.createVerticalStrut(5));
-        settingsPanel.add(bannedWordsInput);
-        settingsPanel.add(Box.createVerticalStrut(10));
-
-// ===== SILENCED USER =====
-        JLabel silencedUsersLabel = new JLabel("Silenced user:");
-        silencedUsersLabel.setForeground(Color.WHITE);
-        silencedUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField silencedUsersInput = new JTextField(silencedUsers);
-        silencedUsersInput.setMaximumSize(new Dimension(400, 25));
-        silencedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        silentPanel.add(silencedUsersLabel);
-        silentPanel.add(Box.createVerticalStrut(5));
-        silentPanel.add(silencedUsersInput);
-        silentPanel.add(Box.createVerticalStrut(10));
-
-// ===== SILENCE ALL USERS =====
-        JLabel silenceAllLabel = new JLabel("Silence all users:");
-        silenceAllLabel.setForeground(Color.WHITE);
-        silenceAllLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField silenceAllInput = new JTextField(String.valueOf(silenceAllUsers));
-        silenceAllInput.setMaximumSize(new Dimension(400, 25));
-        silenceAllInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        silentPanel.add(silenceAllLabel);
-        silentPanel.add(Box.createVerticalStrut(5));
-        silentPanel.add(silenceAllInput);
-        silentPanel.add(Box.createVerticalStrut(10));
-
-// ===== CROWNED USERS =====
-        JLabel crownedUsersLabel = new JLabel("Crowned users:");
-        crownedUsersLabel.setForeground(Color.WHITE);
-        crownedUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField crownedUsersInput = new JTextField(crownedUsers);
-        crownedUsersInput.setMaximumSize(new Dimension(400, 25));
-        crownedUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        crownedPanel.add(crownedUsersLabel);
-        crownedPanel.add(Box.createVerticalStrut(5));
-        crownedPanel.add(crownedUsersInput);
-        crownedPanel.add(Box.createVerticalStrut(10));
-
-// ===== CROWNED PHRASE =====
-        JLabel crownedPhraseLabel = new JLabel("Crowned phrase:");
-        crownedPhraseLabel.setForeground(Color.WHITE);
-        crownedPhraseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField crownedPhraseInput = new JTextField(crownedPhrase);
-        crownedPhraseInput.setMaximumSize(new Dimension(400, 25));
-        crownedPhraseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        crownedPanel.add(crownedPhraseLabel);
-        crownedPanel.add(Box.createVerticalStrut(5));
-        crownedPanel.add(crownedPhraseInput);
-        crownedPanel.add(Box.createVerticalStrut(10));
-
-// ===== CROWNED MESSAGE RESPONSE =====
-        JLabel crownedResponseLabel = new JLabel("Crowned message response:");
-        crownedResponseLabel.setForeground(Color.WHITE);
-        crownedResponseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField crownedResponseInput = new JTextField(crownedMessageResponse);
-        crownedResponseInput.setMaximumSize(new Dimension(400, 25));
-        crownedResponseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        crownedPanel.add(crownedResponseLabel);
-        crownedPanel.add(Box.createVerticalStrut(5));
-        crownedPanel.add(crownedResponseInput);
-        crownedPanel.add(Box.createVerticalStrut(10));
-
-// ===== TERMINATOR USERS =====
-        JLabel terminatorUsersLabel = new JLabel("Terminator users:");
-        terminatorUsersLabel.setForeground(Color.WHITE);
-        terminatorUsersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField terminatorUsersInput = new JTextField(terminatorUsers);
-        terminatorUsersInput.setMaximumSize(new Dimension(400, 25));
-        terminatorUsersInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        terminatorPanel.add(terminatorUsersLabel);
-        terminatorPanel.add(Box.createVerticalStrut(5));
-        terminatorPanel.add(terminatorUsersInput);
-        terminatorPanel.add(Box.createVerticalStrut(10));
-
-// ===== TERMINATOR PHRASE =====
-        JLabel terminatorPhraseLabel = new JLabel("Terminator phrase:");
-        terminatorPhraseLabel.setForeground(Color.WHITE);
-        terminatorPhraseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField terminatorPhraseInput = new JTextField(terminatorUsersPhrase);
-        terminatorPhraseInput.setMaximumSize(new Dimension(400, 25));
-        terminatorPhraseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        terminatorPanel.add(terminatorPhraseLabel);
-        terminatorPanel.add(Box.createVerticalStrut(5));
-        terminatorPanel.add(terminatorPhraseInput);
-        terminatorPanel.add(Box.createVerticalStrut(10));
-
-// ===== TERMINATOR RESPONSE =====
-        JLabel terminatorResponseLabel = new JLabel("Terminator response:");
-        terminatorResponseLabel.setForeground(Color.WHITE);
-        terminatorResponseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField terminatorResponseInput = new JTextField(terminatorUsersResponse);
-        terminatorResponseInput.setMaximumSize(new Dimension(400, 25));
-        terminatorResponseInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        terminatorPanel.add(terminatorResponseLabel);
-        terminatorPanel.add(Box.createVerticalStrut(5));
-        terminatorPanel.add(terminatorResponseInput);
-        terminatorPanel.add(Box.createVerticalStrut(10));
-
-        // Silent Mode
-        JLabel silentModeLabel = new JLabel("Silent mode:");
-        silentModeLabel.setForeground(Color.WHITE);
-        silentModeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextField silentModeInput = new JTextField(silentMode);
-        silentModeInput.setMaximumSize(new Dimension(400, 25));
-        silentModeInput.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        silentPanel.add(silentModeLabel);
-        silentPanel.add(Box.createVerticalStrut(5));
-        silentPanel.add(silentModeInput);
-        silentPanel.add(Box.createVerticalStrut(5));
+// Terminator user settings
+        JTextField terminatorUsersInput = addSettingField(terminatorPanel, "Terminator users:", terminatorUsers);
+        JTextField terminatorPhraseInput = addSettingField(terminatorPanel, "Terminator phrase:", terminatorUsersPhrase);
+        JTextField terminatorResponseInput = addSettingField(terminatorPanel, "Terminator response:", terminatorUsersResponse);
 
 
         JLabel mainLabel = new JLabel();
@@ -407,5 +275,24 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Failed to save " + optionName + ": " + ex.getMessage());
         }
     }
+    private static JTextField addSettingField(JPanel panel, String labelText, String initialValue) {
+        JLabel label = new JLabel(labelText);
+        label.setForeground(Color.WHITE);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JTextField input = new JTextField(initialValue);
+        input.setMaximumSize(new Dimension(400, 25));
+        input.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(label);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(input);
+        panel.add(Box.createVerticalStrut(10));
+
+        return input;
+    }
+
+
+
 
 }
