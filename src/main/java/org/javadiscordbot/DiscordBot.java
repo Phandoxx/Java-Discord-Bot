@@ -16,7 +16,7 @@ public class DiscordBot extends ListenerAdapter {
 
     private JDA jda;
 
-    public void startDiscordBot(String discordToken) {
+    public void startDiscordBot(String discordToken) { //Starts discord bot
         try {
             // Define what data/events your bot will have access to
             EnumSet<GatewayIntent> intents = EnumSet.of(
@@ -39,36 +39,45 @@ public class DiscordBot extends ListenerAdapter {
 
     // This method runs every time a message is sent in any channel the bot can see
     @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) { //runs whenever a message is sent
         String silentMode = Main.settings.get("silentMode", "true");
         // Ignore messages sent by bots (including itself)
         if (event.getAuthor().isBot()) return;
 
+        //Gets the author of the message, and the content of the message
         String author = event.getAuthor().getAsTag();
         String content = event.getMessage().getContentDisplay();
 
+        //Decapitalizes the content
         String decapitalizedContent = content.toLowerCase();
+        //Mentions (pings) author of the message
         String mentionAuthor = event.getAuthor().getAsMention();
 
+        //Prints out the message, useful for debugging
         System.out.printf("[%s] %s\n", author, content);
 
+        //Gets the bannedWords string from settings.ini
         String input = Main.settings.get("bannedWords", "null");
         List<String> BannedWords = Main.stringSetting.getAsList(input);
 
+        //Gets string array for the crowned user(s), and get the string for the phrase and response
         String crownedUsers = Main.settings.get("crownedUsers", "null");
         List<String> crownedUsersArray = Main.stringSetting.getAsList(crownedUsers);
         String crownedPhrase = Main.settings.get("crownedPhrase", "null");
         String crownedMessageResponse = Main.settings.get("crownedMessageResponse", "null");
 
+        //Checks for crowned message (phrase), responds with crowned message response
         if (decapitalizedContent.contains(crownedPhrase.toLowerCase()) && crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
             event.getChannel().sendMessage(crownedMessageResponse + mentionAuthor).queue();
         }
 
+        //Gets string array for the terminator user(s), the phrase and the response
         String terminatorUser = Main.settings.get("terminatorUsers", "null");
         List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
         String terminatorUserPhrase = Main.settings.get("terminatorUsersPhrase", "null");
         String terminatorUserResponse = Main.settings.get("terminatorUsersResponse", "null");
 
+        //Checks for the terminator users message (phrase), respond with terminator message if found
         if (decapitalizedContent.contains(terminatorUserPhrase.toLowerCase()) && terminatorUserArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) {
             event.getChannel().sendMessage(mentionAuthor + " " + terminatorUserResponse)
                     .queue(message -> {
@@ -77,10 +86,12 @@ public class DiscordBot extends ListenerAdapter {
                     });
         }
 
+        //Gets string array for silenced Users, and string for silencedAllUsers setting
         String silencedUsers = Main.settings.get("silencedUser", "null");
         List<String> silencedUsersArray = Main.stringSetting.getAsList(silencedUsers);
         String silencedAllUsers = Main.settings.get("silenceAllUsers", "false");
 
+        //If silencedAllUsers settings is enabled:
         if (silencedAllUsers.equalsIgnoreCase("false")) {
             for (String message : BannedWords) {
                 // Check if message contains a banned word AND author matches
@@ -93,7 +104,7 @@ public class DiscordBot extends ListenerAdapter {
                 }
             }
         }
-        else {
+        else { //If silencedAllUsers in not enabled:
             for (String message : BannedWords) {
                 // Check if message contains a banned word AND author matches
                 if (decapitalizedContent.contains(message)) {
@@ -115,28 +126,34 @@ public class DiscordBot extends ListenerAdapter {
     @Override
     public void onMessageUpdate(@NotNull net.dv8tion.jda.api.events.message.MessageUpdateEvent event) {
         // Ignore messages from bots (including itself)
+        //Check string array for crownedUsers
         if (event.getAuthor().isBot()) return;
         String crownedUsers = Main.settings.get("crownedUsers", "null");
         List<String> crownedUsersArray = Main.stringSetting.getAsList(crownedUsers);
         String crownedPhrase = Main.settings.get("crownedPhrase", "null");
         String crownedMessageResponse = Main.settings.get("crownedMessageResponse", "null");
 
+        //Check string array for terminator users
         String terminatorUser = Main.settings.get("terminatorUsers", "null");
         List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
         String terminatorUserPhrase = Main.settings.get("terminatorUsersPhrase", "null");
         String terminatorUserResponse = Main.settings.get("terminatorUsersResponse", "null");
 
+        //stores the author of the edited message and the content of the now edited message
         String author = event.getAuthor().getAsTag();
         String content = event.getMessage().getContentDisplay().toLowerCase();
 
+        //Gets string array of banned words
         String input = Main.settings.get("bannedWords", "null");
         List<String> BannedWords = Main.stringSetting.getAsList(input);
 
+        //Gets string array of silenced Users
         String silencedUsers = Main.settings.get("silencedUser", "null");
         List<String> silencedUsersArray = Main.stringSetting.getAsList(silencedUsers);
 
         String silencedAllUsers = Main.settings.get("silenceAllUsers", "false");
 
+        //If silencedAllUsers is not enabled:
         if (silencedAllUsers.equalsIgnoreCase("false")){
 
             for (String banned : BannedWords) {
@@ -150,7 +167,7 @@ public class DiscordBot extends ListenerAdapter {
                 }
             }
         }
-        else {
+        else {// If silencedAllUsers is enabled:
             if (crownedUsersArray.stream().anyMatch(u -> u.equalsIgnoreCase(author)) || (terminatorUserArray.stream().anyMatch(u -> u.equalsIgnoreCase(author))) ) {
                 System.out.println("Not deleting from crowned or terminator users");
             }
