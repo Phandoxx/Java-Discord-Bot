@@ -45,35 +45,38 @@ public class Main {
         MainFrame MainFrame = new MainFrame();
         MainFrame.setLayout(new BorderLayout());
 
+        //Define panels
         JPanel settingsPanel = new JPanel();
         JPanel silentPanel = new JPanel();
         JPanel crownedPanel = new JPanel();
         JPanel terminatorPanel = new JPanel();
 
+        //Define tabbed pane, add pane to GUI
         JTabbedPane tabbedPane = new JTabbedPane();
         MainFrame.add(tabbedPane);
 
 
+        //Set panel sizes
         settingsPanel.setPreferredSize(new Dimension(500,200));
         crownedPanel.setPreferredSize(new Dimension(500,200));
         terminatorPanel.setPreferredSize(new Dimension(500,200));
         silentPanel.setPreferredSize(new Dimension(500,200));
 
-        ImageIcon image = new ImageIcon("files/logo/amd.png");
-        Border border = BorderFactory.createLineBorder(Color.GREEN, 3);
 
-
+        //Set panel layouts, and add them to GUI (mainFrame)
         MainFrame.add(settingsPanel, BorderLayout.CENTER);
         MainFrame.add(silentPanel, BorderLayout.SOUTH);
         MainFrame.add(crownedPanel, BorderLayout.EAST);
         MainFrame.add(terminatorPanel, BorderLayout.EAST);
 
 
+        //Set BoxLayout
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
         silentPanel.setLayout(new BoxLayout(silentPanel, BoxLayout.Y_AXIS));
         crownedPanel.setLayout(new BoxLayout(crownedPanel, BoxLayout.Y_AXIS));
         terminatorPanel.setLayout(new BoxLayout(terminatorPanel, BoxLayout.Y_AXIS));
 
+        //Set background colors for each panel (tab)
         settingsPanel.setBackground(new Color(31, 31, 31));
         crownedPanel.setBackground(new Color(31, 31, 31));
         terminatorPanel.setBackground(new Color(31, 31, 31));
@@ -101,9 +104,8 @@ public class Main {
         JTextField terminatorResponseInput = addSettingField(terminatorPanel, "Terminator response:", terminatorUsersResponse);
 
 
+        //Set the Jlabel for start and stop buttons
         JLabel mainLabel = new JLabel();
-        //mainLabel.setText("AMD logo (it's just a random image I had)");
-        //mainLabel.setIcon(image);
         mainLabel.setHorizontalAlignment(JLabel.CENTER);
         mainLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
         mainLabel.setForeground(Color.WHITE);
@@ -113,6 +115,7 @@ public class Main {
         mainLabel.setHorizontalAlignment(JLabel.CENTER);
         mainLabel.setVerticalAlignment(JLabel.CENTER);
 
+        //Start button
         JButton startButton = new JButton();
         startButton.setText("Start");
         startButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
@@ -121,6 +124,7 @@ public class Main {
         startButton.setBounds(100, 100, 100, 30);
         silentPanel.add(startButton);
 
+        //Stop button
         JButton stopButton = new JButton();
         stopButton.setText("Close/Stop");
         stopButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
@@ -129,9 +133,10 @@ public class Main {
         stopButton.setBounds(500, 100, 100, 30);
         silentPanel.add(stopButton);
 
+        //Start button functionaility
         startButton.addActionListener(e -> {
+            //Retrieve variables from settings.ini
             String enteredToken = discordTokenInput.getText(); // get the text
-            System.out.println("token: " + enteredToken);
 
             String enteredBannedWords = bannedWordsInput.getText();
             System.out.println("banned words: " + enteredBannedWords);
@@ -163,6 +168,7 @@ public class Main {
             String enteredTerminatorResponse = terminatorResponseInput.getText();
             System.out.println("terminator response: " + enteredTerminatorResponse);
 
+            //Save the settings to settings.ini
             saveSetting(ini.get(), "general", "bannedWords", enteredBannedWords);
             saveSetting(ini.get(), "general", "silencedUser", enteredSilencedUsers);
             saveSetting(ini.get(), "general", "silentMode", enteredSilentMode);
@@ -174,10 +180,11 @@ public class Main {
             saveSetting(ini.get(), "general", "terminatorUsersPhrase", enteredTerminatorPhrase);
             saveSetting(ini.get(), "general", "terminatorUsersResponse", enteredTerminatorResponse);
 
-            System.out.println("Start button clicked!");
+            System.out.println("Starting discord bot...");
             JOptionPane.showMessageDialog(null, "Starting discord bot!");
 
 
+            //Reload settings.ini
             try {
                 settings.set(new settings("options/settings.ini")); // reload settings object
                 System.out.println("Reloaded Main.settings from file");
@@ -187,16 +194,19 @@ public class Main {
             }
 
 
+            //Call the discord bot, from DiscordBot.java
             DiscordBot bot = new DiscordBot();
             bot.startDiscordBot(enteredToken);
         });
 
 
+        //Stop button functionality
         stopButton.addActionListener(e -> {
             System.out.println("Close/Stop button clicked!");
             System.exit(0);
         });
 
+        //Set control pannel
         JPanel controlPanel = new JPanel();
         controlPanel.setBackground(new Color(51, 51, 51));
         controlPanel.add(startButton);
@@ -204,21 +214,23 @@ public class Main {
 
         MainFrame.add(controlPanel, BorderLayout.SOUTH);
 
+        //Add panes (tabs)
         tabbedPane.addTab("General", settingsPanel);
         tabbedPane.addTab("Silent Settings", silentPanel);
         tabbedPane.addTab("Crowned Settings", crownedPanel);
         tabbedPane.addTab("Terminator Settings", terminatorPanel);
 
+        //Add tabbedPanes to the GUI
         MainFrame.add(tabbedPane, BorderLayout.CENTER);
         MainFrame.setVisible(true);
 
 
     }
-    public static void setup() {
+    public static void setup() { //Old function, will remove at some point
             String username = JOptionPane.showInputDialog("Enter your username");
             JOptionPane.showMessageDialog(null, "Welcome " + username);
     }
-    public static class settings {
+    public static class settings { //Retrives settings
         private static final Properties props = new Properties();
         public settings(String settingsPath) throws IOException {
             // Try to load from classpath first (inside the JAR)
@@ -246,7 +258,7 @@ public class Main {
             return props.getProperty(key, defaultValue);
         }
     }
-    public class stringSetting {
+    public class stringSetting { //Splits String into a String array based on the ","
 
         public static List<String> getAsList(String text) {
             String[] parts = text.split(",");
@@ -263,7 +275,7 @@ public class Main {
             return String.join(" ", list);
         }
     }
-    public static void saveSetting(Wini ini, String sectionName, String optionName, String input) {
+    public static void saveSetting(Wini ini, String sectionName, String optionName, String input) { //Function to save settings to settings.ini
         try {
             ini.put(sectionName, optionName, input);
             ini.store();
@@ -273,7 +285,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Failed to save " + optionName + ": " + ex.getMessage());
         }
     }
-    private static JTextField addSettingField(JPanel panel, String labelText, String initialValue) {
+    private static JTextField addSettingField(JPanel panel, String labelText, String initialValue) { //Adds the text inputs
         JLabel label = new JLabel(labelText);
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
