@@ -22,6 +22,7 @@ public class Main {
 
         String discordToken = settings.get().get("discordToken", "null"); // matches the .ini key
         System.out.println(discordToken);
+        String disableSilencing = settings.get().get("disableSilencing", "null"); // matches the .ini key
 
         String bannedWords = settings.get().get("bannedWords", "null");
         String silencedUsers = settings.get().get("silencedUser", "null");
@@ -87,6 +88,7 @@ public class Main {
 // General / Discord settings
         JTextField discordTokenInput = addSettingField(settingsPanel, "Discord bot token:", discordToken);
         JTextField bannedWordsInput = addSettingField(settingsPanel, "Banned words:", bannedWords);
+        JTextField disableSilencingInput = addSettingField(settingsPanel, "Disable Silencing:", disableSilencing);
 
 // Silent user settings
         JTextField silencedUsersInput = addSettingField(silentPanel, "Silenced user:", silencedUsers);
@@ -141,6 +143,9 @@ public class Main {
             String enteredBannedWords = bannedWordsInput.getText();
             System.out.println("banned words: " + enteredBannedWords);
 
+            String enteredDisableSilencing = disableSilencingInput.getText();
+            System.out.println("disabled silencing: " + enteredDisableSilencing);
+
             String enteredSilencedUsers = silencedUsersInput.getText();
             System.out.println("silenced users: " + enteredSilencedUsers);
 
@@ -171,6 +176,7 @@ public class Main {
             //Save the settings to settings.ini
             saveSetting(ini.get(), "general", "bannedWords", enteredBannedWords);
             saveSetting(ini.get(), "general", "silencedUser", enteredSilencedUsers);
+            saveSetting(ini.get(), "general", "disableSilencing", enteredDisableSilencing);
             saveSetting(ini.get(), "general", "silentMode", enteredSilentMode);
             saveSetting(ini.get(), "general", "silenceAllUsers", enteredSilenceAllUsers);
             saveSetting(ini.get(), "general", "crownedUsers", enteredCrownedUsers);

@@ -22,13 +22,20 @@ public class DiscordBot extends ListenerAdapter {
             EnumSet<GatewayIntent> intents = EnumSet.of(
                     GatewayIntent.GUILD_MESSAGES,      // Messages in servers
                     GatewayIntent.DIRECT_MESSAGES,     // Direct messages
-                    GatewayIntent.MESSAGE_CONTENT      // Needed to read message text
+                    GatewayIntent.MESSAGE_CONTENT,      // Needed to read message text
+                    GatewayIntent.GUILD_MEMBERS        //for user lookup
             );
 
             jda = JDABuilder.createLight(discordToken, intents)
                     .addEventListeners(this) // listen for events in THIS class
                     .setActivity(Activity.playing("Im always watching..."))
                     .build();
+
+            jda.upsertCommand("spam", "spam a user")
+                    .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.USER, "user", "The user to spam", true)
+                    .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "rate", "How many times to spam", true)
+                    .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "message", "the message to send")
+                    .queue();
 
             jda.awaitReady(); // Wait until the bot is fully loaded
             System.out.println("Bot is online!");
@@ -40,6 +47,10 @@ public class DiscordBot extends ListenerAdapter {
     // This method runs every time a message is sent in any channel the bot can see
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) { //runs whenever a message is sent
+        String disableSilencing = Main.settings.get("disableSilencing", "null");// when disableSilencing setting is true, don't censor message
+        if (disableSilencing.equalsIgnoreCase("true")) {
+            return;
+        }
         String silentMode = Main.settings.get("silentMode", "true");
         // Ignore messages sent by bots (including itself)
         if (event.getAuthor().isBot()) return;
@@ -125,6 +136,10 @@ public class DiscordBot extends ListenerAdapter {
     }
     @Override
     public void onMessageUpdate(@NotNull net.dv8tion.jda.api.events.message.MessageUpdateEvent event) {
+        String disableSilencing = Main.settings.get("disableSilencing", "null");
+        if (disableSilencing.equalsIgnoreCase("true")) { // when disableSilencing setting is true, don't censor message
+            return;
+        }
         // Ignore messages from bots (including itself)
         //Check string array for crownedUsers
         if (event.getAuthor().isBot()) return;
@@ -185,4 +200,22 @@ public class DiscordBot extends ListenerAdapter {
             }
         }
     }
+    @Override
+    public void onSlashCommandInteraction(@NotNull net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent event) {
+        if (event.getName().equals("spam")) {
+            // Get the command options
+            var user = event.getOption("user").getAsUser();
+            int rate = event.getOption("rate").getAsInt();
+            String message = event.getOption("message") != null ? event.getOption("message").getAsString() : "";
+
+            // Respond to the interaction (required by Discord)
+            event.reply("Spamming " + user.getAsMention() + " " + rate + " times!").queue();
+
+            // Actually do the spam
+            for (int i = 0; i < rate; i++) {
+                event.getChannel().sendMessage(user.getAsMention() + " " + message).queue();
+            }
+        }
+    }
+
 }
