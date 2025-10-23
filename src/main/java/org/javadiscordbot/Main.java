@@ -236,34 +236,40 @@ public class Main {
             String username = JOptionPane.showInputDialog("Enter your username");
             JOptionPane.showMessageDialog(null, "Welcome " + username);
     }
-    public static class settings { //Retrives settings
+    public static class settings { // Retrieves settings
         private static final Properties props = new Properties();
+        private static final File settingsFile = new File("files/options/settings.ini");
+        private static long lastModified = 0; // track when file last changed
+
         public settings(String settingsPath) throws IOException {
-            // Try to load from classpath first (inside the JAR)
-            InputStream stream = getClass().getResourceAsStream("/" + settingsPath);
-            if (stream != null) {
-                try (InputStreamReader reader = new InputStreamReader(stream)) {
-                    props.load(reader);
-                    return;
-                }
-            }
+            reload(); // load it once on creation
+        }
 
-            // Fallback: load from disk (useful when running in IDE)
-            File settingsFile = new File("files/" + settingsPath);
-            if (settingsFile.exists()) {
+        // Re-reads settings.ini if it has changed
+        private static void reload() throws IOException {
+            if (!settingsFile.exists()) throw new FileNotFoundException("settings.ini not found: " + settingsFile.getAbsolutePath());
+
+            long modified = settingsFile.lastModified();
+            if (modified != lastModified) { // only reload if the file actually changed
                 try (FileReader reader = new FileReader(settingsFile)) {
+                    props.clear();
                     props.load(reader);
-                    return;
+                    lastModified = modified;
+                    System.out.println("🔄 Reloaded settings.ini (detected change)");
                 }
             }
-
-            throw new FileNotFoundException("settings.ini not found in classpath or disk");
         }
 
         public static String get(String key, String defaultValue) {
+            try {
+                reload(); // ensure we’re always up-to-date
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return props.getProperty(key, defaultValue);
         }
     }
+
     public class stringSetting { //Splits String into a String array based on the ","
 
         public static List<String> getAsList(String text) {

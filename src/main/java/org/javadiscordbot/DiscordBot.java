@@ -36,6 +36,10 @@ public class DiscordBot extends ListenerAdapter {
                     .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER, "rate", "How many times to spam", true)
                     .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.STRING, "message", "the message to send")
                     .queue();
+            jda.upsertCommand("toggle_silencing", "Enable or disable message silencing")
+                    .addOption(net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN, "state", "True to disable silencing, false to enable silencing", true)
+                    .queue();
+
 
             jda.awaitReady(); // Wait until the bot is fully loaded
             System.out.println("Bot is online!");
@@ -202,30 +206,12 @@ public class DiscordBot extends ListenerAdapter {
     }
     @Override
     public void onSlashCommandInteraction(@NotNull net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent event) {
-        if (event.getName().equals("spam")) {
-            // Get the command options
-            String executor = event.getUser().getAsTag();
-            var user = event.getOption("user").getAsUser();
-            int rate = event.getOption("rate").getAsInt();
-            String message = event.getOption("message") != null ? event.getOption("message").getAsString() : "";
-
-            String terminatorUser = Main.settings.get("terminatorUsers", "null");
-            List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
-
-            // Check if the command executor has permission
-            if (!terminatorUserArray.contains(executor)) {
-                event.reply("❌ Higher Perms Required!").setEphemeral(true).queue();
-                return;
-            }
-
-            // Respond to the interaction (required by Discord)
-            event.reply("Spamming " + user.getAsMention() + " " + rate + " times!").queue();
-
-            // Actually do the spam
-            for (int i = 0; i < rate; i++) {
-                event.getChannel().sendMessage(user.getAsMention() + " " + message).queue();
-            }
+        switch (event.getName()) {
+            case "spam" -> org.javadiscordbot.SpamCommand.execute(event);
+            case "toggle_silencing" -> org.javadiscordbot.ToggleSilencingCommand.execute(event);
+            default -> event.reply("Unknown command!").setEphemeral(true).queue();
         }
     }
+
 
 }
