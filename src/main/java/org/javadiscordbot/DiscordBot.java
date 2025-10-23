@@ -68,9 +68,6 @@ public class DiscordBot extends ListenerAdapter {
         //Mentions (pings) author of the message
         String mentionAuthor = event.getAuthor().getAsMention();
 
-        //Prints out the message, useful for debugging
-        System.out.printf("[%s] %s\n", author, content);
-
         //Gets the bannedWords string from settings.ini
         String input = Main.settings.get("bannedWords", "null");
         List<String> BannedWords = Main.stringSetting.getAsList(input);
