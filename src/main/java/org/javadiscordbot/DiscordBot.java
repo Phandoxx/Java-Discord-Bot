@@ -204,9 +204,19 @@ public class DiscordBot extends ListenerAdapter {
     public void onSlashCommandInteraction(@NotNull net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent event) {
         if (event.getName().equals("spam")) {
             // Get the command options
+            String executor = event.getUser().getAsTag();
             var user = event.getOption("user").getAsUser();
             int rate = event.getOption("rate").getAsInt();
             String message = event.getOption("message") != null ? event.getOption("message").getAsString() : "";
+
+            String terminatorUser = Main.settings.get("terminatorUsers", "null");
+            List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
+
+            // Check if the command executor has permission
+            if (!terminatorUserArray.contains(executor)) {
+                event.reply("❌ Higher Perms Required!").setEphemeral(true).queue();
+                return;
+            }
 
             // Respond to the interaction (required by Discord)
             event.reply("Spamming " + user.getAsMention() + " " + rate + " times!").queue();
