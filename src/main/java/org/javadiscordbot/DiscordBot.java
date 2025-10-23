@@ -206,15 +206,6 @@ public class DiscordBot extends ListenerAdapter {
             // Get the command options
             var user = event.getOption("user").getAsUser();
             int rate = event.getOption("rate").getAsInt();
-            String executor = event.getUser().getAsTag();
-
-            String terminatorUser = Main.settings.get("terminatorUsers", "null");
-            List<String> terminatorUserArray = Main.stringSetting.getAsList(terminatorUser);
-            if (!terminatorUserArray.contains(executor)) {
-                event.reply("❌ Higher Perms Required!").setEphemeral(true).queue();
-                return;
-            }
-
             String message = event.getOption("message") != null ? event.getOption("message").getAsString() : "";
 
             // Respond to the interaction (required by Discord)
